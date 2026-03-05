@@ -1,0 +1,15 @@
+services:
+  contextdoc-tools:
+    build:
+      context: .
+      dockerfile: docker/contextdoc-tools.Dockerfile
+      args:
+        CONTEXTDOC_REF: ${CONTEXTDOC_REF}
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    environment:
+      CTX_MODEL: ${CTX_MODEL}
+      OLLAMA_BASE_URL: ${OLLAMA_BASE_URL}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
