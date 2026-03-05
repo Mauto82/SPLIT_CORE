@@ -37,9 +37,10 @@ export function buildFrameRendererAdapter({ config, documentRef }) {
       columns: config.rendering.terminal.columns,
       rows: config.rendering.terminal.rows,
       emptyChar: config.rendering.terminal.emptyChar,
-      pointChar: config.rendering.terminal.pointChar,
+      depthShades: config.rendering.terminal.depthShades,
       backgroundColor: config.rendering.backgroundColor,
-      pointColor: config.rendering.pointColor
+      pointColor: config.rendering.pointColor,
+      cameraDistance: config.projection.cameraDistance
     });
   }
   throw new Error(`Unsupported rendering backend: ${backend}`);

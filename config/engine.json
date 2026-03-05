@@ -14,7 +14,7 @@
       "columns": 140,
       "rows": 52,
       "emptyChar": " ",
-      "pointChar": "•"
+      "depthShades": " .:-=+*#%@"
     }
   },
   "projection": {

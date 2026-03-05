@@ -20,6 +20,7 @@ export class RenderSceneUseCase {
       this.frameRendererPort.renderPoint({
         x: projected.x,
         y: projected.y,
+        z: point.z,
         color,
         radius,
         viewport
