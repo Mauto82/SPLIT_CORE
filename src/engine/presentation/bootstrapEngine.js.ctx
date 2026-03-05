@@ -4,10 +4,11 @@ tensions:
   - "Rendering minimale su Canvas 2D invece di WebGL per minimizzare complessità e costo cognitivo."
   - "Proiezione con formula unica per privilegiare leggibilità e controllo rispetto al realismo visivo."
   - "Configurazione esterna obbligatoria: assenza di valori di fallback per mantenere fail-fast."
+  - "Le figure sono configurate come lista esterna; il bootstrap non deve conoscere tipi specifici."
 
 workflows:
-  bootstrap_flow: "carica config JSON -> risolve canvas -> costruisce adapter/servizi -> avvia loop animazione"
-  render_tick: "genera scena ruotata -> proietta punti 3D -> renderizza frame completo"
+  bootstrap_flow: "carica config JSON -> risolve canvas -> costruisce adapter/servizi -> costruisce scena multi-shape -> avvia loop animazione"
+  render_tick: "aggiorna rotazioni per ogni figura -> aggrega punti 3D -> proietta punti -> renderizza frame completo"
 
 conceptualTests:
   - name: "Configurazione mancante"
@@ -21,8 +22,12 @@ conceptualTests:
   - name: "Tick di rendering coerente"
     steps:
       - action: "eseguire più frame con configurazione valida"
-        expect: "output animato stabile con punti proiettati al centro viewport"
+        expect: "output animato stabile con più figure in rotazione simultanea"
+  - name: "Tipo figura non supportato"
+    steps:
+      - action: "configurare una figura con type non presente nella libreria"
+        expect: "errore esplicito con identificazione del tipo non supportato"
 
 todos:
-  - "Introdurre edge list per disegnare segmenti del cubo oltre ai vertici."
+  - "Introdurre edge list per disegnare segmenti delle figure oltre ai vertici."
   - "Aggiungere policy di visibilità per clipping parziale."

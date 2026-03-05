@@ -14,12 +14,68 @@
     "cameraDistance": 6
   },
   "scene": {
-    "cubeSize": 2,
-    "rotationSpeed": {
-      "x": 0.009,
-      "y": 0.012,
-      "z": 0.006
-    }
+    "shapes": [
+      {
+        "id": "shape-cube",
+        "type": "cube",
+        "size": 1.2,
+        "rotationSpeed": {
+          "x": 0.009,
+          "y": 0.012,
+          "z": 0.006
+        },
+        "offset": {
+          "x": -2.2,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "shape-tetra",
+        "type": "tetrahedron",
+        "size": 1.5,
+        "rotationSpeed": {
+          "x": 0.013,
+          "y": 0.007,
+          "z": 0.011
+        },
+        "offset": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "shape-octa",
+        "type": "octahedron",
+        "size": 1.6,
+        "rotationSpeed": {
+          "x": 0.008,
+          "y": 0.014,
+          "z": 0.01
+        },
+        "offset": {
+          "x": 2.2,
+          "y": 0,
+          "z": 0
+        }
+      },
+      {
+        "id": "shape-prism",
+        "type": "prism",
+        "size": 1.3,
+        "rotationSpeed": {
+          "x": 0.01,
+          "y": 0.01,
+          "z": 0.015
+        },
+        "offset": {
+          "x": 0,
+          "y": -2,
+          "z": 0
+        }
+      }
+    ]
   },
   "loop": {
     "frameRate": 60

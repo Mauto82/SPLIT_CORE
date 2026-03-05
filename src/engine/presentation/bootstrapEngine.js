@@ -1,5 +1,5 @@
 import { RenderSceneUseCase } from "../application/use_cases/RenderSceneUseCase.js";
-import { CubeSceneService } from "../application/services/CubeSceneService.js";
+import { buildRotatingShapesSceneService } from "../application/services/RotatingShapesSceneService.js";
 import { JsonConfigRepository } from "../infrastructure/config/JsonConfigRepository.js";
 import { AnimationLoop } from "../infrastructure/clock/AnimationLoop.js";
 import { FormulaProjectionAdapter } from "../infrastructure/projection/FormulaProjectionAdapter.js";
@@ -24,15 +24,14 @@ export async function bootstrapEngine({ configPath }) {
     backgroundColor: config.rendering.backgroundColor
   });
   const renderSceneUseCase = new RenderSceneUseCase({ projectionPort, frameRendererPort });
-  const cubeSceneService = new CubeSceneService({
-    cubeSize: config.scene.cubeSize,
-    rotationSpeed: config.scene.rotationSpeed
+  const sceneService = buildRotatingShapesSceneService({
+    shapes: config.scene.shapes
   });
 
   const animationLoop = new AnimationLoop({
     frameRate: config.loop.frameRate,
     onTick: () => {
-      const points3d = cubeSceneService.nextFramePoints();
+      const points3d = sceneService.nextFramePoints();
       renderSceneUseCase.execute({
         points3d,
         viewport: config.viewport,

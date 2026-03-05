@@ -26,16 +26,35 @@ export class JsonConfigRepository {
       "rendering.pointRadius",
       "projection.focalLength",
       "projection.cameraDistance",
-      "scene.cubeSize",
-      "scene.rotationSpeed.x",
-      "scene.rotationSpeed.y",
-      "scene.rotationSpeed.z",
+      "scene.shapes",
       "loop.frameRate"
     ];
     for (const keyPath of requiredPaths) {
       const value = keyPath.split(".").reduce((node, key) => node?.[key], config);
       if (value === undefined || value === null) {
         throw new Error(`Missing required config value: ${keyPath}`);
+      }
+    }
+    if (!Array.isArray(config.scene.shapes) || config.scene.shapes.length === 0) {
+      throw new Error("scene.shapes must be a non-empty array");
+    }
+    for (const shape of config.scene.shapes) {
+      const requiredShapePaths = [
+        "id",
+        "type",
+        "size",
+        "rotationSpeed.x",
+        "rotationSpeed.y",
+        "rotationSpeed.z",
+        "offset.x",
+        "offset.y",
+        "offset.z"
+      ];
+      for (const keyPath of requiredShapePaths) {
+        const value = keyPath.split(".").reduce((node, key) => node?.[key], shape);
+        if (value === undefined || value === null) {
+          throw new Error(`Missing required shape value: ${keyPath}`);
+        }
       }
     }
   }
