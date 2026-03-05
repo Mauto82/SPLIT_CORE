@@ -1,0 +1,21 @@
+purpose: "Avviare il motore JS browser-only con configurazione esterna selezionata via query string."
+
+tensions:
+  - "Semplicità deploy browser statico vs estendibilità: entrypoint unico senza switch multi-app."
+  - "Configurabilità runtime vs determinismo: solo override del percorso config senza cambiare bootstrap."
+
+workflows:
+  engine_bootstrap: "legge query config -> risolve path config engine -> avvia bootstrapEngine"
+
+conceptualTests:
+  - name: "Avvio con config default"
+    steps:
+      - action: "avvio senza query config"
+        expect: "entrypoint avvia bootstrapEngine"
+  - name: "Avvio con override config"
+    steps:
+      - action: "avvio con query config valida"
+        expect: "entrypoint avvia bootstrapEngine con percorso custom"
+
+todos:
+  - "Introdurre validazione URI config per distinguere errori path da errori di caricamento."
