@@ -18,6 +18,39 @@
       "depthRange": {
         "near": -4,
         "far": 4
+      },
+      "console": {
+        "enabled": true,
+        "containerElementId": "engine-console",
+        "screenElementId": "engine-console-output",
+        "inputElementId": "engine-console-input",
+        "prompt": "engine",
+        "promptSeparator": " > ",
+        "maxLines": 14,
+        "welcomeLines": [
+          "Terminale motore attivo",
+          "Comandi: help, status, pause, resume, speed <valore>"
+        ],
+        "commands": {
+          "help": "help",
+          "pause": "pause",
+          "resume": "resume",
+          "speed": "speed",
+          "status": "status"
+        },
+        "messages": {
+          "help": "Comandi disponibili: help | status | pause | resume | speed <valore positivo>",
+          "paused": "Loop in pausa",
+          "resumed": "Loop ripreso",
+          "statusPrefix": "Stato",
+          "runningToken": "running",
+          "pausedToken": "paused",
+          "speedToken": "speed",
+          "shapesToken": "shapes",
+          "speedUpdatedPrefix": "Speed aggiornata",
+          "invalidSpeedValue": "Valore speed non valido",
+          "unknownCommandPrefix": "Comando sconosciuto"
+        }
       }
     }
   },
@@ -90,6 +123,7 @@
     ]
   },
   "loop": {
-    "frameRate": 60
+    "frameRate": 60,
+    "startPaused": false
   }
 }

@@ -11,6 +11,7 @@ export class RotatingShapesSceneService {
     this.shapeLibrary = shapeLibrary;
     this.shapes = shapes.map((shape) => this.validateShape(shape));
     this.anglesByShape = new Map();
+    this.rotationSpeedMultiplier = 1;
     for (const shape of this.shapes) {
       this.anglesByShape.set(shape.id, { x: 0, y: 0, z: 0 });
     }
@@ -20,9 +21,9 @@ export class RotatingShapesSceneService {
     const points = [];
     for (const shape of this.shapes) {
       const angles = this.anglesByShape.get(shape.id);
-      angles.x += shape.rotationSpeed.x;
-      angles.y += shape.rotationSpeed.y;
-      angles.z += shape.rotationSpeed.z;
+      angles.x += shape.rotationSpeed.x * this.rotationSpeedMultiplier;
+      angles.y += shape.rotationSpeed.y * this.rotationSpeedMultiplier;
+      angles.z += shape.rotationSpeed.z * this.rotationSpeedMultiplier;
       const vertices = this.shapeLibrary.getVertices(shape.type);
       for (const vertex of vertices) {
         const scaled = {
@@ -39,6 +40,24 @@ export class RotatingShapesSceneService {
       }
     }
     return points;
+  }
+
+  setRotationSpeedMultiplier({ value }) {
+    if (value === undefined || value === null) {
+      throw new Error("value is required");
+    }
+    if (typeof value !== "number" || Number.isNaN(value) || value <= 0) {
+      throw new Error("value must be a positive number");
+    }
+    this.rotationSpeedMultiplier = value;
+  }
+
+  getRotationSpeedMultiplier() {
+    return this.rotationSpeedMultiplier;
+  }
+
+  getShapeCount() {
+    return this.shapes.length;
   }
 
   rotatePoint(point, angles) {

@@ -90,6 +90,7 @@
     ]
   },
   "loop": {
-    "frameRate": 60
+    "frameRate": 60,
+    "startPaused": false
   }
 }

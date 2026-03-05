@@ -1,0 +1,25 @@
+purpose: "Tradurre i comandi testuali del terminale in azioni applicative sul runtime del motore."
+
+tensions:
+  - "Parsing minimale vs robustezza: tokenizzazione semplice con validazioni esplicite."
+  - "Comandi configurabili vs coerenza dominio: nomi comandi iniettati da config e semantica stabile."
+
+workflows:
+  command_use_case_flow: "riceve input raw -> risolve comando configurato -> applica azione su runtime/scene -> restituisce linee output"
+
+conceptualTests:
+  - name: "Comando pausa e resume"
+    steps:
+      - action: "inviare comando pausa e poi resume"
+        expect: "paused true dopo pausa e false dopo resume"
+  - name: "Comando speed valido"
+    steps:
+      - action: "inviare speed con valore numerico positivo"
+        expect: "rotation scale aggiornata e output conferma"
+  - name: "Comando sconosciuto"
+    steps:
+      - action: "inviare comando non definito"
+        expect: "messaggio unknown command esplicito"
+
+todos:
+  - "Aggiungere completamento comandi via adapter UI senza modificare use case."

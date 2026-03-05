@@ -1,0 +1,21 @@
+purpose: "Centralizzare lo stato runtime mutabile del motore per render loop e comandi terminale."
+
+tensions:
+  - "Semplicità stato condiviso vs isolamento: unico service applicativo con API esplicite."
+  - "Mutabilità controllata vs leggibilità: stato minimo (paused) con metodi intenzionali."
+
+workflows:
+  runtime_state_flow: "inizializza stato da config -> comandi aggiornano pausa -> loop legge stato a ogni tick"
+
+conceptualTests:
+  - name: "Toggle pausa"
+    steps:
+      - action: "alternare stato pausa più volte"
+        expect: "valore paused coerente con chiamate effettuate"
+  - name: "Set pausa esplicito"
+    steps:
+      - action: "impostare paused con valore nullo e poi booleano valido"
+        expect: "errore esplicito sul nullo e stato aggiornato sul valore valido"
+
+todos:
+  - "Aggiungere metrica aggregata di frame renderizzati e frame skippati."

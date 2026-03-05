@@ -1,0 +1,25 @@
+purpose: "Generare frame di punti 3D animati da una scena di forme con rotazione incrementale configurata."
+
+tensions:
+  - "Prestazioni frame-by-frame vs purezza immutabile: aggiornamento interno degli angoli per ridurre allocazioni."
+  - "Controllo runtime vs semplicità: moltiplicatore globale di rotazione applicato senza mutare la configurazione originaria."
+
+workflows:
+  scene_frame_flow: "per ogni shape aggiorna angoli con speedMultiplier -> ruota vertici -> applica offset -> aggrega punti"
+
+conceptualTests:
+  - name: "Frame coerente con shape valide"
+    steps:
+      - action: "calcolare frame con più forme configurate"
+        expect: "ritorno array punti 3D non vuoto"
+  - name: "Aggiornamento speed multiplier"
+    steps:
+      - action: "impostare speedMultiplier positivo e generare frame"
+        expect: "incremento angoli scalato dal moltiplicatore"
+  - name: "Speed multiplier invalido"
+    steps:
+      - action: "impostare speedMultiplier non positivo"
+        expect: "errore esplicito fail-fast"
+
+todos:
+  - "Introdurre modalità freeze per singola shape mantenendo le altre in animazione."

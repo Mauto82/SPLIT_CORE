@@ -24,7 +24,7 @@
         display: none;
       }
 
-      #terminal-app {
+      #engine-console {
         display: none;
         width: min(100%, 960px);
         height: min(100%, 540px);
@@ -34,7 +34,7 @@
         box-sizing: border-box;
       }
 
-      #terminal-screen {
+      #engine-console-output {
         margin: 0;
         white-space: pre-wrap;
         overflow: auto;
@@ -45,7 +45,7 @@
         padding: 10px;
       }
 
-      #terminal-input {
+      #engine-console-input {
         width: 100%;
         box-sizing: border-box;
         color: #44d9e6;
@@ -60,9 +60,9 @@
     <main id="app">
       <canvas id="projection-canvas"></canvas>
       <pre id="projection-terminal"></pre>
-      <section id="terminal-app">
-        <pre id="terminal-screen"></pre>
-        <input id="terminal-input" type="text" autocomplete="off" />
+      <section id="engine-console">
+        <pre id="engine-console-output"></pre>
+        <input id="engine-console-input" type="text" autocomplete="off" />
       </section>
     </main>
     <script type="module" src="./src/main.js"></script>

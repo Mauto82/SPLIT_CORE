@@ -5,10 +5,12 @@ tensions:
   - "Proiezione con formula unica per privilegiare leggibilità e controllo rispetto al realismo visivo."
   - "Configurazione esterna obbligatoria: assenza di valori di fallback per mantenere fail-fast."
   - "Le figure sono configurate come lista esterna; il bootstrap non deve conoscere tipi specifici."
+  - "Controllo runtime via terminale vs separazione responsabilità: bootstrap compone terminal adapter e delega semantica comandi al layer application."
 
 workflows:
-  bootstrap_flow: "carica config JSON -> delega risoluzione target rendering alla factory adapter -> costruisce servizi applicativi/scena -> avvia loop animazione"
-  render_tick: "aggiorna rotazioni per ogni figura -> aggrega punti 3D -> proietta punti -> renderizza frame completo"
+  bootstrap_flow: "carica config JSON -> delega risoluzione target rendering alla factory adapter -> costruisce servizi applicativi/scena/runtime -> opzionalmente compone terminale comandi -> avvia loop animazione"
+  render_tick: "se runtime non in pausa aggiorna rotazioni per ogni figura -> aggrega punti 3D -> proietta punti -> renderizza frame completo"
+  terminal_command_flow: "input terminale -> use case comando -> aggiorna stato runtime (pause/speed) -> terminale stampa esito e stato corrente"
 
 conceptualTests:
   - name: "Configurazione mancante"
@@ -18,11 +20,15 @@ conceptualTests:
   - name: "Canvas non risolto"
     steps:
       - action: "config con canvasId non presente nel DOM"
-        expect: "errore esplicito propagato dalla factory del renderer durante la composizione"
+        expect: "bootstrap delega integralmente la validazione del target renderer alla factory adapter"
   - name: "Tick di rendering coerente"
     steps:
       - action: "eseguire più frame con configurazione valida"
         expect: "output animato stabile con più figure in rotazione simultanea"
+  - name: "Comandi terminale runtime"
+    steps:
+      - action: "inviare comandi pause resume speed status help dal terminale"
+        expect: "bootstrap collega input terminale al use case comandi e renderizza risposte testuali"
   - name: "Tipo figura non supportato"
     steps:
       - action: "avvio con configurazione scena invalida che fa fallire la costruzione del servizio scena"

@@ -1,0 +1,25 @@
+purpose: "Caricare e validare la configurazione esterna del motore con policy fail-fast."
+
+tensions:
+  - "Validazione completa vs complessità: key-path espliciti per ridurre ambiguità runtime."
+  - "Backend multipli vs coerenza schema: sezioni obbligatorie per canvas e terminale validate separatamente."
+
+workflows:
+  config_validation_flow: "load JSON -> valida requisiti comuni -> valida blocco backend specifico -> valida shape scene"
+
+conceptualTests:
+  - name: "Config incompleta"
+    steps:
+      - action: "caricare config senza campi richiesti"
+        expect: "errore esplicito con key path mancante"
+  - name: "Config terminale con console"
+    steps:
+      - action: "caricare config terminale con console abilitata e campi completi"
+        expect: "validazione completata senza errori"
+  - name: "Backend sconosciuto"
+    steps:
+      - action: "caricare config con backend non supportato"
+        expect: "errore esplicito backend non supportato"
+
+todos:
+  - "Estrarre schema dichiarativo per ridurre duplicazione dei path richiesti."

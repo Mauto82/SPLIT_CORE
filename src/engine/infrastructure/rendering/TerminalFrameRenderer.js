@@ -1,8 +1,12 @@
 import { FrameRendererPort } from "../../domain/ports/FrameRendererPort.js";
 
 export class TerminalFrameRenderer extends FrameRendererPort {
-  constructor({ container, columns, rows, emptyChar, depthShades, backgroundColor, pointColor, depthNear, depthFar }) {
+  constructor(config) {
     super();
+    if (!config) {
+      throw new Error("config is required");
+    }
+    const { container, columns, rows, emptyChar, depthShades, backgroundColor, pointColor, depthNear, depthFar } = config;
     if (!container) {
       throw new Error("container is required");
     }
