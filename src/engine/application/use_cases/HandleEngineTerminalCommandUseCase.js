@@ -44,7 +44,16 @@ export class HandleEngineTerminalCommandUseCase {
     if (command === this.commandsConfig.status) {
       return [this.buildStatusLine()];
     }
+    if (command === this.commandsConfig.reset) {
+      this.runtimeState.reset();
+      this.sceneService.resetAnimationState();
+      return [this.messagesConfig.reset];
+    }
     return [`${this.messagesConfig.unknownCommandPrefix}: ${command}`];
+  }
+
+  getCommandNames() {
+    return Array.from(new Set(Object.values(this.commandsConfig)));
   }
 
   handleSpeed({ value }) {

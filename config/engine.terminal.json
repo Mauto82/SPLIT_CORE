@@ -29,21 +29,25 @@
         "prompt": "engine",
         "promptSeparator": " > ",
         "maxLines": 14,
+        "historySize": 64,
+        "autocompleteEnabled": true,
         "welcomeLines": [
           "Terminale motore attivo",
-          "Comandi: help, status, pause, resume, speed <valore>"
+          "Comandi: help, status, pause, resume, speed <valore>, reset"
         ],
         "commands": {
           "help": "help",
           "pause": "pause",
           "resume": "resume",
           "speed": "speed",
-          "status": "status"
+          "status": "status",
+          "reset": "reset"
         },
         "messages": {
-          "help": "Comandi disponibili: help | status | pause | resume | speed <valore positivo>",
+          "help": "Comandi disponibili: help | status | pause | resume | speed <valore positivo> | reset",
           "paused": "Loop in pausa",
           "resumed": "Loop ripreso",
+          "reset": "Runtime e animazione resettati",
           "statusPrefix": "Stato",
           "runningToken": "running",
           "pausedToken": "paused",

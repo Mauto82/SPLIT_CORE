@@ -91,6 +91,9 @@ function buildTerminalConsole({ config, sceneService, runtimeState, documentRef 
     prompt: config.rendering.terminal.console.prompt,
     promptSeparator: config.rendering.terminal.console.promptSeparator,
     maxLines: config.rendering.terminal.console.maxLines,
+    historySize: config.rendering.terminal.console.historySize,
+    autocompleteEnabled: config.rendering.terminal.console.autocompleteEnabled,
+    commandNames: commandUseCase.getCommandNames(),
     onCommand: ({ rawInput }) => commandUseCase.execute({ rawInput })
   });
 }

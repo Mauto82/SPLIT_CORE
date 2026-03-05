@@ -3,7 +3,8 @@ export class EngineRuntimeState {
     if (paused === undefined || paused === null) {
       throw new Error("paused is required");
     }
-    this.paused = paused;
+    this.paused = Boolean(paused);
+    this.initialPaused = Boolean(paused);
   }
 
   setPaused({ value }) {
@@ -15,5 +16,9 @@ export class EngineRuntimeState {
 
   isPaused() {
     return this.paused;
+  }
+
+  reset() {
+    this.paused = this.initialPaused;
   }
 }

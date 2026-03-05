@@ -12,6 +12,7 @@ export class RotatingShapesSceneService {
     this.shapes = shapes.map((shape) => this.validateShape(shape));
     this.anglesByShape = new Map();
     this.rotationSpeedMultiplier = 1;
+    this.initialRotationSpeedMultiplier = 1;
     for (const shape of this.shapes) {
       this.anglesByShape.set(shape.id, { x: 0, y: 0, z: 0 });
     }
@@ -58,6 +59,16 @@ export class RotatingShapesSceneService {
 
   getShapeCount() {
     return this.shapes.length;
+  }
+
+  resetAnimationState() {
+    this.rotationSpeedMultiplier = this.initialRotationSpeedMultiplier;
+    for (const shape of this.shapes) {
+      const angles = this.anglesByShape.get(shape.id);
+      angles.x = 0;
+      angles.y = 0;
+      angles.z = 0;
+    }
   }
 
   rotatePoint(point, angles) {
