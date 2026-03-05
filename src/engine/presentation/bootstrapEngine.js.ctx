@@ -25,8 +25,8 @@ conceptualTests:
         expect: "output animato stabile con più figure in rotazione simultanea"
   - name: "Tipo figura non supportato"
     steps:
-      - action: "configurare una figura con type non presente nella libreria"
-        expect: "errore esplicito con identificazione del tipo non supportato"
+      - action: "avvio con configurazione scena invalida che fa fallire la costruzione del servizio scena"
+        expect: "bootstrap interrompe l'avvio propagando errore esplicito prima del loop"
 
 todos:
   - "Introdurre edge list per disegnare segmenti delle figure oltre ai vertici."

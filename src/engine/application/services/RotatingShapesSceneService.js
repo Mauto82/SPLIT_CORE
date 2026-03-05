@@ -71,9 +71,16 @@ export class RotatingShapesSceneService {
     if (!shape.rotationSpeed) {
       throw new Error(`shape.rotationSpeed is required: ${shape.id}`);
     }
+    if (shape.rotationSpeed.x === undefined || shape.rotationSpeed.y === undefined || shape.rotationSpeed.z === undefined) {
+      throw new Error(`shape.rotationSpeed.x/y/z are required: ${shape.id}`);
+    }
     if (!shape.offset) {
       throw new Error(`shape.offset is required: ${shape.id}`);
     }
+    if (shape.offset.x === undefined || shape.offset.y === undefined || shape.offset.z === undefined) {
+      throw new Error(`shape.offset.x/y/z are required: ${shape.id}`);
+    }
+    this.shapeLibrary.getVertices(shape.type);
     return shape;
   }
 }

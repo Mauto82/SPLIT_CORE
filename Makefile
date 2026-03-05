@@ -1,6 +1,7 @@
 CTX_COMPOSE=docker compose -f docker-compose.ctx.yml --env-file .env.ctx
 CTX_RUN=python /opt/contextdoc/tools/ctx-run/ctx_run.py
 CTX_WATCH=python /opt/contextdoc/tools/ctx-watch/ctx_watch.py
+CTX_TARGET=src
 
 .PHONY: ctx-build ctx-run ctx-run-json ctx-watch-status ctx-watch-live ctx-watch-reverse ctx-cache-clear
 
@@ -8,10 +9,10 @@ ctx-build:
 	$(CTX_COMPOSE) build contextdoc-tools
 
 ctx-run:
-	$(CTX_COMPOSE) run --rm contextdoc-tools $(CTX_RUN) run .
+	$(CTX_COMPOSE) run --rm contextdoc-tools $(CTX_RUN) run $(CTX_TARGET)
 
 ctx-run-json:
-	$(CTX_COMPOSE) run --rm contextdoc-tools $(CTX_RUN) run . --output json
+	$(CTX_COMPOSE) run --rm contextdoc-tools $(CTX_RUN) run $(CTX_TARGET) --output json
 
 ctx-watch-status:
 	$(CTX_COMPOSE) run --rm contextdoc-tools $(CTX_WATCH) status . --since 86400

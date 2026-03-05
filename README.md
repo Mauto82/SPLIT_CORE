@@ -25,10 +25,12 @@ make ctx-cache-clear
 - `ctx-run`: esegue i `conceptualTests` dei file `.ctx` tramite LLM.
 - `ctx-watch`: controlla drift tra file sorgente e file `.ctx`.
 
+`ctx-run` è puntato a `src/` per evitare collisioni con `.env.ctx`, che è un file environment e non un ContextDoc.
+
 ## Variabili ambiente
 
 - `CONTEXTDOC_REF`: branch o tag del repository ContextDoc da usare nel container.
-- `CTX_MODEL`: modello LiteLLM per `ctx-run`.
-- `OLLAMA_BASE_URL`: endpoint Ollama raggiungibile dal container, ad esempio `http://host.docker.internal:11434`.
+- `CTX_MODEL`: modello LiteLLM per `ctx-run`; con Ollama usare prefisso `ollama/`, ad esempio `ollama/gpt-oss:120b-cloud`.
+- `OLLAMA_BASE_URL`: endpoint Ollama raggiungibile dal container, ad esempio `http://host.docker.internal:11434` (viene propagato anche a `OLLAMA_API_BASE`).
 - `OPENAI_API_KEY`: chiave provider OpenAI opzionale.
 - `ANTHROPIC_API_KEY`: chiave provider Anthropic opzionale.
