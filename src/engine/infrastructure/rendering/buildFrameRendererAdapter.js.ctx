@@ -1,0 +1,25 @@
+purpose: "Selezionare il renderer infrastructure in base al backend configurato senza introdurre logica di business applicativa."
+
+tensions:
+  - "Backend multipli con interfaccia unica: massimizzare sostituibilità mantenendo fail-fast su configurazioni errate."
+  - "Composizione nel bootstrap: il modulo decide adapter concreti ma delega il rendering alle implementazioni specializzate."
+
+workflows:
+  renderer_selection: "legge rendering.backend -> valida presenza target DOM -> istanzia adapter canvas o terminale -> gestisce visibilità dei container"
+
+conceptualTests:
+  - name: "Backend canvas valido"
+    steps:
+      - action: "configurazione con rendering.backend canvas e canvas esistente"
+        expect: "ritorna adapter canvas e nasconde eventuale container terminale"
+  - name: "Backend terminal valido"
+    steps:
+      - action: "configurazione con rendering.backend terminal e container terminale esistente"
+        expect: "ritorna adapter terminale e nasconde eventuale canvas"
+  - name: "Backend non supportato"
+    steps:
+      - action: "configurazione con rendering.backend sconosciuto"
+        expect: "errore esplicito con identificazione backend"
+
+todos:
+  - "Spostare policy di visibilità in un adapter UI dedicato per separare composizione e presentazione."

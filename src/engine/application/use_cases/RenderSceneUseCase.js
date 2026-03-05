@@ -21,7 +21,8 @@ export class RenderSceneUseCase {
         x: projected.x,
         y: projected.y,
         color,
-        radius
+        radius,
+        viewport
       });
     }
     this.frameRendererPort.endFrame();

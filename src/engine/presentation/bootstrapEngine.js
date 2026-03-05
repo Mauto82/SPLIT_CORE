@@ -3,25 +3,19 @@ import { buildRotatingShapesSceneService } from "../application/services/Rotatin
 import { JsonConfigRepository } from "../infrastructure/config/JsonConfigRepository.js";
 import { AnimationLoop } from "../infrastructure/clock/AnimationLoop.js";
 import { FormulaProjectionAdapter } from "../infrastructure/projection/FormulaProjectionAdapter.js";
-import { CanvasFrameRenderer } from "../infrastructure/rendering/CanvasFrameRenderer.js";
+import { buildFrameRendererAdapter } from "../infrastructure/rendering/buildFrameRendererAdapter.js";
 
 export async function bootstrapEngine({ configPath }) {
   const configRepository = new JsonConfigRepository({ path: configPath });
   const config = await configRepository.load();
-  const canvas = document.getElementById(config.canvasId);
-  if (!canvas) {
-    throw new Error(`Canvas not found: ${config.canvasId}`);
-  }
-  canvas.width = config.viewport.width;
-  canvas.height = config.viewport.height;
 
   const projectionPort = new FormulaProjectionAdapter({
     focalLength: config.projection.focalLength,
     cameraDistance: config.projection.cameraDistance
   });
-  const frameRendererPort = new CanvasFrameRenderer({
-    canvas,
-    backgroundColor: config.rendering.backgroundColor
+  const frameRendererPort = buildFrameRendererAdapter({
+    config,
+    documentRef: document
   });
   const renderSceneUseCase = new RenderSceneUseCase({ projectionPort, frameRendererPort });
   const sceneService = buildRotatingShapesSceneService({

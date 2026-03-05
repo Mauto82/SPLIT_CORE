@@ -18,9 +18,9 @@ export class JsonConfigRepository {
 
   validate(config) {
     const requiredPaths = [
-      "canvasId",
       "viewport.width",
       "viewport.height",
+      "rendering.backend",
       "rendering.backgroundColor",
       "rendering.pointColor",
       "rendering.pointRadius",
@@ -34,6 +34,23 @@ export class JsonConfigRepository {
       if (value === undefined || value === null) {
         throw new Error(`Missing required config value: ${keyPath}`);
       }
+    }
+    if (config.rendering.backend === "canvas") {
+      this.validateKeyPath({ value: config, keyPath: "canvasId", label: "config" });
+    } else if (config.rendering.backend === "terminal") {
+      const terminalPaths = [
+        "canvasId",
+        "rendering.terminal.elementId",
+        "rendering.terminal.columns",
+        "rendering.terminal.rows",
+        "rendering.terminal.emptyChar",
+        "rendering.terminal.pointChar"
+      ];
+      for (const keyPath of terminalPaths) {
+        this.validateKeyPath({ value: config, keyPath, label: "config" });
+      }
+    } else {
+      throw new Error(`Unsupported rendering backend: ${config.rendering.backend}`);
     }
     if (!Array.isArray(config.scene.shapes) || config.scene.shapes.length === 0) {
       throw new Error("scene.shapes must be a non-empty array");
@@ -51,11 +68,15 @@ export class JsonConfigRepository {
         "offset.z"
       ];
       for (const keyPath of requiredShapePaths) {
-        const value = keyPath.split(".").reduce((node, key) => node?.[key], shape);
-        if (value === undefined || value === null) {
-          throw new Error(`Missing required shape value: ${keyPath}`);
-        }
+        this.validateKeyPath({ value: shape, keyPath, label: "shape" });
       }
+    }
+  }
+
+  validateKeyPath({ value, keyPath, label }) {
+    const keyValue = keyPath.split(".").reduce((node, key) => node?.[key], value);
+    if (keyValue === undefined || keyValue === null) {
+      throw new Error(`Missing required ${label} value: ${keyPath}`);
     }
   }
 }

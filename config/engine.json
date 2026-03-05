@@ -5,9 +5,17 @@
     "height": 540
   },
   "rendering": {
+    "backend": "canvas",
     "backgroundColor": "#000000",
     "pointColor": "#44d9e6",
-    "pointRadius": 3
+    "pointRadius": 3,
+    "terminal": {
+      "elementId": "projection-terminal",
+      "columns": 140,
+      "rows": 52,
+      "emptyChar": " ",
+      "pointChar": "•"
+    }
   },
   "projection": {
     "focalLength": 280,

@@ -14,6 +14,8 @@ make ctx-build
 ```bash
 make ctx-run
 make ctx-run-json
+make ctx-run-verbose
+make ctx-run-fix
 make ctx-watch-status
 make ctx-watch-live
 make ctx-watch-reverse
@@ -26,6 +28,18 @@ make ctx-cache-clear
 - `ctx-watch`: controlla drift tra file sorgente e file `.ctx`.
 
 `ctx-run` è puntato a `src/` per evitare collisioni con `.env.ctx`, che è un file environment e non un ContextDoc.
+
+## Rendering terminale
+
+- Config canvas: `config/engine.json`
+- Config terminale: `config/engine.terminal.json`
+- Selettore runtime: query string `?config=...`
+
+Esempio:
+
+```bash
+http://localhost:4173/?config=./config/engine.terminal.json
+```
 
 ## Variabili ambiente
 

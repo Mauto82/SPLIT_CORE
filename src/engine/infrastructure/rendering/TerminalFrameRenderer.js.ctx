@@ -1,0 +1,26 @@
+purpose: "Adattare il rendering dei punti proiettati su un buffer testuale monospazio nel DOM."
+
+tensions:
+  - "Fedeltà geometrica vs semplicità: discretizzazione su griglia caratteri invece di rendering vettoriale."
+  - "Prestazioni vs chiarezza: ricostruzione frame completo per mantenere stato deterministico e facile da verificare."
+  - "Portabilità vs styling: output testuale puro con stile minimo delegato al container."
+
+workflows:
+  frame_pipeline: "beginFrame inizializza buffer -> renderPoint mappa coordinate viewport su cella -> endFrame serializza buffer in textContent"
+
+conceptualTests:
+  - name: "Inizializzazione obbligatoria"
+    steps:
+      - action: "istanziare renderer senza parametri terminal richiesti"
+        expect: "errore esplicito al costruttore"
+  - name: "Mapping punti in viewport"
+    steps:
+      - action: "renderizzare punti con viewport valido"
+        expect: "celle corrispondenti impostate con pointChar senza uscire dai limiti"
+  - name: "Viewport invalido"
+    steps:
+      - action: "renderPoint con viewport assente o dimensioni non valide"
+        expect: "errore esplicito fail-fast"
+
+todos:
+  - "Introdurre densità caratteri configurabile per simulare profondità percettiva."

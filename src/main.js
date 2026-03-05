@@ -1,5 +1,6 @@
 import { bootstrapEngine } from "./engine/presentation/bootstrapEngine.js";
 
-const CONFIG_PATH = "./config/engine.json";
+const query = new URLSearchParams(window.location.search);
+const CONFIG_PATH = query.get("config") || "./config/engine.json";
 
 bootstrapEngine({ configPath: CONFIG_PATH });
