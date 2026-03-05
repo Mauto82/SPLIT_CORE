@@ -1,0 +1,27 @@
+{
+  "canvasId": "projection-canvas",
+  "viewport": {
+    "width": 960,
+    "height": 540
+  },
+  "rendering": {
+    "backgroundColor": "#000000",
+    "pointColor": "#44d9e6",
+    "pointRadius": 3
+  },
+  "projection": {
+    "focalLength": 280,
+    "cameraDistance": 6
+  },
+  "scene": {
+    "cubeSize": 2,
+    "rotationSpeed": {
+      "x": 0.009,
+      "y": 0.012,
+      "z": 0.006
+    }
+  },
+  "loop": {
+    "frameRate": 60
+  }
+}

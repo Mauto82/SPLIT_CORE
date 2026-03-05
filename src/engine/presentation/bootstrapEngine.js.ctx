@@ -1,0 +1,28 @@
+purpose: "Comporre il motore grafico leggero tramite dependency injection e avviare il loop."
+
+tensions:
+  - "Rendering minimale su Canvas 2D invece di WebGL per minimizzare complessità e costo cognitivo."
+  - "Proiezione con formula unica per privilegiare leggibilità e controllo rispetto al realismo visivo."
+  - "Configurazione esterna obbligatoria: assenza di valori di fallback per mantenere fail-fast."
+
+workflows:
+  bootstrap_flow: "carica config JSON -> risolve canvas -> costruisce adapter/servizi -> avvia loop animazione"
+  render_tick: "genera scena ruotata -> proietta punti 3D -> renderizza frame completo"
+
+conceptualTests:
+  - name: "Configurazione mancante"
+    steps:
+      - action: "avvio con path configurazione non valido"
+        expect: "errore esplicito e nessun loop avviato"
+  - name: "Canvas non risolto"
+    steps:
+      - action: "config con canvasId non presente nel DOM"
+        expect: "errore esplicito prima della composizione completa"
+  - name: "Tick di rendering coerente"
+    steps:
+      - action: "eseguire più frame con configurazione valida"
+        expect: "output animato stabile con punti proiettati al centro viewport"
+
+todos:
+  - "Introdurre edge list per disegnare segmenti del cubo oltre ai vertici."
+  - "Aggiungere policy di visibilità per clipping parziale."
