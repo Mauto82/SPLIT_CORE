@@ -36,6 +36,8 @@ export function buildFrameRendererAdapter({ config, documentRef }) {
       container: terminal,
       columns: config.rendering.terminal.columns,
       rows: config.rendering.terminal.rows,
+      fontSizePx: config.rendering.terminal.fontSizePx,
+      lineHeight: config.rendering.terminal.lineHeight,
       emptyChar: config.rendering.terminal.emptyChar,
       depthShades: config.rendering.terminal.depthShades,
       backgroundColor: config.rendering.backgroundColor,

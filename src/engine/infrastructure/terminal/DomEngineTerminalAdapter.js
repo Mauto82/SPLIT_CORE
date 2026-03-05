@@ -68,6 +68,7 @@ export class DomEngineTerminalAdapter {
 
   render() {
     this.screenElement.textContent = this.lines.join("\n");
+    this.screenElement.scrollTop = this.screenElement.scrollHeight;
   }
 
   focusInput() {

@@ -11,31 +11,47 @@
         width: 100%;
         height: 100%;
         background: #000;
+        overflow: hidden;
       }
 
       #app {
         width: 100%;
         height: 100%;
-        display: grid;
-        place-items: center;
+        position: relative;
+        overflow: hidden;
       }
 
+      #projection-canvas,
       #projection-terminal {
+        position: absolute;
+        inset: 0;
+        margin: 0;
         display: none;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
       }
 
       #engine-console {
+        position: absolute;
+        left: 50%;
+        bottom: 12px;
+        transform: translateX(-50%);
+        z-index: 10;
         display: none;
-        width: min(100%, 960px);
-        height: min(100%, 540px);
-        grid-template-rows: 1fr auto;
+        width: min(960px, calc(100vw - 24px));
+        height: min(260px, calc(100vh - 24px));
+        grid-template-rows: minmax(0, 1fr) auto;
         gap: 8px;
-        padding: 12px;
+        padding: 10px;
         box-sizing: border-box;
+        border: 1px solid #44d9e6;
+        background: rgba(0, 0, 0, 0.88);
       }
 
       #engine-console-output {
         margin: 0;
+        min-height: 0;
         white-space: pre-wrap;
         overflow: auto;
         color: #44d9e6;

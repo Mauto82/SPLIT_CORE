@@ -7,7 +7,7 @@ export class JsonConfigRepository {
   }
 
   async load() {
-    const response = await fetch(this.path);
+    const response = await fetch(this.path, { cache: "no-store" });
     if (!response.ok) {
       throw new Error(`Cannot load config file: ${this.path}`);
     }
@@ -44,6 +44,8 @@ export class JsonConfigRepository {
         "rendering.terminal.elementId",
         "rendering.terminal.columns",
         "rendering.terminal.rows",
+        "rendering.terminal.fontSizePx",
+        "rendering.terminal.lineHeight",
         "rendering.terminal.emptyChar",
         "rendering.terminal.depthShades",
         "rendering.terminal.depthRange.near",

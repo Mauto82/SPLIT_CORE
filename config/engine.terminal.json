@@ -13,6 +13,8 @@
       "elementId": "projection-terminal",
       "columns": 140,
       "rows": 52,
+      "fontSizePx": 9,
+      "lineHeight": 1,
       "emptyChar": " ",
       "depthShades": " .:-=+*#%@",
       "depthRange": {

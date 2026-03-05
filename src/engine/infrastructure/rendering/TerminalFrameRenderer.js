@@ -6,7 +6,7 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     if (!config) {
       throw new Error("config is required");
     }
-    const { container, columns, rows, emptyChar, depthShades, backgroundColor, pointColor, depthNear, depthFar } = config;
+    const { container, columns, rows, fontSizePx, lineHeight, emptyChar, depthShades, backgroundColor, pointColor, depthNear, depthFar } = config;
     if (!container) {
       throw new Error("container is required");
     }
@@ -15,6 +15,18 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     }
     if (!rows) {
       throw new Error("rows is required");
+    }
+    if (fontSizePx === undefined || fontSizePx === null) {
+      throw new Error("fontSizePx is required");
+    }
+    if (typeof fontSizePx !== "number" || Number.isNaN(fontSizePx) || fontSizePx <= 0) {
+      throw new Error("fontSizePx must be a positive number");
+    }
+    if (lineHeight === undefined || lineHeight === null) {
+      throw new Error("lineHeight is required");
+    }
+    if (typeof lineHeight !== "number" || Number.isNaN(lineHeight) || lineHeight <= 0) {
+      throw new Error("lineHeight must be a positive number");
     }
     if (!emptyChar) {
       throw new Error("emptyChar is required");
@@ -43,6 +55,8 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     this.container = container;
     this.columns = columns;
     this.rows = rows;
+    this.fontSizePx = fontSizePx;
+    this.lineHeight = lineHeight;
     this.emptyChar = emptyChar;
     this.depthShades = Array.from(depthShades);
     this.backgroundColor = backgroundColor;
@@ -55,7 +69,12 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     this.container.style.color = this.pointColor;
     this.container.style.margin = "0";
     this.container.style.whiteSpace = "pre";
+    this.container.style.overflow = "hidden";
+    this.container.style.width = "100%";
+    this.container.style.height = "100%";
     this.container.style.fontFamily = "monospace";
+    this.container.style.fontSize = `${this.fontSizePx}px`;
+    this.container.style.lineHeight = `${this.lineHeight}`;
     this.container.style.userSelect = "none";
   }
 
