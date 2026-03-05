@@ -3,10 +3,11 @@ purpose: "Adattare il rendering dei punti proiettati su un buffer testuale monos
 tensions:
   - "Fedeltà geometrica vs semplicità: discretizzazione su griglia caratteri invece di rendering vettoriale."
   - "Leggibilità ASCII vs costo computazionale: depth buffer e scelta carattere per profondità aumentano qualità percepita."
+  - "Controllo artistico vs robustezza: range profondità esplicito da configurazione per evitare assunzioni implicite."
   - "Portabilità vs styling: output testuale puro con stile minimo delegato al container."
 
 workflows:
-  frame_pipeline: "beginFrame inizializza char buffer e depth buffer -> renderPoint mappa coordinate e aggiorna cella solo se più vicina alla camera -> endFrame serializza buffer in textContent"
+  frame_pipeline: "beginFrame inizializza char buffer e depth buffer -> renderPoint mappa coordinate e aggiorna cella solo se z è minore del valore salvato -> mapDepthToChar usa depthRange configurato -> endFrame serializza buffer in textContent"
 
 conceptualTests:
   - name: "Inizializzazione obbligatoria"
@@ -15,16 +16,20 @@ conceptualTests:
         expect: "errore esplicito al costruttore"
   - name: "Mapping punti in viewport"
     steps:
-      - action: "renderizzare punti con viewport valido e z differenti"
-        expect: "celle aggiornate con carattere da palette in base alla profondità"
+      - action: "renderizzare punti con viewport valido, z differenti e depthRange configurato"
+        expect: "celle aggiornate con carattere da palette in base al range near/far configurato"
   - name: "Occlusione coerente"
     steps:
       - action: "renderizzare due punti sulla stessa cella con profondità diverse"
-        expect: "rimane il punto più vicino alla camera"
+        expect: "rimane il punto con z minore perché più vicino alla camera"
   - name: "Viewport invalido"
     steps:
       - action: "renderPoint con viewport assente o dimensioni non valide"
         expect: "errore esplicito fail-fast"
+  - name: "Range profondità invalido"
+    steps:
+      - action: "istanziare renderer con depthNear maggiore o uguale a depthFar"
+        expect: "errore esplicito al costruttore"
 
 todos:
-  - "Aggiungere opzione di gradiente dinamico per scena o shape."
+  - "Aggiungere palette multiple selezionabili per shape o layer."

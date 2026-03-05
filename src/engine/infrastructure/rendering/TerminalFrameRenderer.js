@@ -1,7 +1,7 @@
 import { FrameRendererPort } from "../../domain/ports/FrameRendererPort.js";
 
 export class TerminalFrameRenderer extends FrameRendererPort {
-  constructor({ container, columns, rows, emptyChar, depthShades, backgroundColor, pointColor, cameraDistance }) {
+  constructor({ container, columns, rows, emptyChar, depthShades, backgroundColor, pointColor, depthNear, depthFar }) {
     super();
     if (!container) {
       throw new Error("container is required");
@@ -27,8 +27,14 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     if (!pointColor) {
       throw new Error("pointColor is required");
     }
-    if (!cameraDistance) {
-      throw new Error("cameraDistance is required");
+    if (depthNear === undefined || depthNear === null) {
+      throw new Error("depthNear is required");
+    }
+    if (depthFar === undefined || depthFar === null) {
+      throw new Error("depthFar is required");
+    }
+    if (depthNear >= depthFar) {
+      throw new Error("depthNear must be less than depthFar");
     }
     this.container = container;
     this.columns = columns;
@@ -37,7 +43,8 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     this.depthShades = Array.from(depthShades);
     this.backgroundColor = backgroundColor;
     this.pointColor = pointColor;
-    this.cameraDistance = cameraDistance;
+    this.depthNear = depthNear;
+    this.depthFar = depthFar;
     this.buffer = [];
     this.depthBuffer = [];
     this.container.style.backgroundColor = this.backgroundColor;
@@ -50,7 +57,7 @@ export class TerminalFrameRenderer extends FrameRendererPort {
 
   beginFrame() {
     this.buffer = Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, () => this.emptyChar));
-    this.depthBuffer = Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, () => Number.NEGATIVE_INFINITY));
+    this.depthBuffer = Array.from({ length: this.rows }, () => Array.from({ length: this.columns }, () => Number.POSITIVE_INFINITY));
   }
 
   renderPoint({ x, y, z, viewport }) {
@@ -68,7 +75,7 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     if (row < 0 || row >= this.rows || col < 0 || col >= this.columns) {
       return;
     }
-    if (z <= this.depthBuffer[row][col]) {
+    if (z >= this.depthBuffer[row][col]) {
       return;
     }
     this.depthBuffer[row][col] = z;
@@ -81,9 +88,9 @@ export class TerminalFrameRenderer extends FrameRendererPort {
   }
 
   mapDepthToChar(z) {
-    const normalized = (z + this.cameraDistance) / (this.cameraDistance * 2);
+    const normalized = (z - this.depthNear) / (this.depthFar - this.depthNear);
     const clamped = Math.min(1, Math.max(0, normalized));
-    const index = Math.round(clamped * (this.depthShades.length - 1));
+    const index = Math.round((1 - clamped) * (this.depthShades.length - 1));
     return this.depthShades[index];
   }
 }

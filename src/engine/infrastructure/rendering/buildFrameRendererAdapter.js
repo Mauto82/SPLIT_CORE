@@ -40,7 +40,8 @@ export function buildFrameRendererAdapter({ config, documentRef }) {
       depthShades: config.rendering.terminal.depthShades,
       backgroundColor: config.rendering.backgroundColor,
       pointColor: config.rendering.pointColor,
-      cameraDistance: config.projection.cameraDistance
+      depthNear: config.rendering.terminal.depthRange.near,
+      depthFar: config.rendering.terminal.depthRange.far
     });
   }
   throw new Error(`Unsupported rendering backend: ${backend}`);

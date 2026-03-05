@@ -14,7 +14,11 @@
       "columns": 140,
       "rows": 52,
       "emptyChar": " ",
-      "depthShades": " .:-=+*#%@"
+      "depthShades": " .:-=+*#%@",
+      "depthRange": {
+        "near": -4,
+        "far": 4
+      }
     }
   },
   "projection": {

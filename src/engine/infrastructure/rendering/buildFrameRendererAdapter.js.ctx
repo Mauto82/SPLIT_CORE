@@ -5,7 +5,7 @@ tensions:
   - "Composizione nel bootstrap: il modulo decide adapter concreti ma delega il rendering alle implementazioni specializzate."
 
 workflows:
-  renderer_selection: "legge rendering.backend -> valida presenza target DOM -> istanzia adapter canvas o terminale -> gestisce visibilità dei container"
+  renderer_selection: "legge rendering.backend -> valida presenza target DOM -> per terminale inietta depthRange configurato -> istanzia adapter concreto -> gestisce visibilità dei container"
 
 conceptualTests:
   - name: "Backend canvas valido"
@@ -15,7 +15,7 @@ conceptualTests:
   - name: "Backend terminal valido"
     steps:
       - action: "configurazione con rendering.backend terminal e container terminale esistente"
-        expect: "ritorna adapter terminale e nasconde eventuale canvas"
+        expect: "ritorna adapter terminale con depthRange iniettato e nasconde eventuale canvas"
   - name: "Backend non supportato"
     steps:
       - action: "configurazione con rendering.backend sconosciuto"

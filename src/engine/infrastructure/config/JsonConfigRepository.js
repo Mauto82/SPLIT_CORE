@@ -44,7 +44,9 @@ export class JsonConfigRepository {
         "rendering.terminal.columns",
         "rendering.terminal.rows",
         "rendering.terminal.emptyChar",
-        "rendering.terminal.depthShades"
+        "rendering.terminal.depthShades",
+        "rendering.terminal.depthRange.near",
+        "rendering.terminal.depthRange.far"
       ];
       for (const keyPath of terminalPaths) {
         this.validateKeyPath({ value: config, keyPath, label: "config" });
