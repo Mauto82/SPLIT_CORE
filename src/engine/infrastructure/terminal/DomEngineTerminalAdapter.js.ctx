@@ -1,25 +1,36 @@
-purpose: "Adattare input/output del terminale DOM verso il use case comandi del motore senza logica di business."
+purpose: "Adattare input/output del terminale DOM verso i use case applicativi e il renderer prospettico senza logica di business."
 
 tensions:
   - "Responsività UI vs isolamento: adapter gestisce eventi e renderizza buffer, use case decide contenuto."
   - "Memoria limitata vs tracciabilità: output mantenuto con capacità massima configurata."
+  - "Esperienza cinematica vs separazione responsabilità: adapter orchestri il flusso ma delega la trasformazione 3D del testo al layer rendering."
+  - "Prompt interattivo leggibile vs profondità visiva: input corrente rimane nitido mentre storico output viene inviato al renderer con fuga prospettica."
 
 workflows:
-  dom_terminal_flow: "bind input keydown Enter -> rende visibile container console -> inoltra comando al use case -> appende output al buffer -> aggiorna area screen"
+  dom_terminal_flow: "bind input keydown Enter -> inoltra comando ai use case -> appende output logico al buffer -> passa snapshot linee al renderer prospettico -> aggiorna input corrente separato dallo storico"
+  prompt_flow: "setPrompt riceve nuovo contesto dal use case gioco -> adapter aggiorna prompt senza alterare lo storico renderizzato in profondità"
 
 conceptualTests:
   - name: "Submit comando da input"
     steps:
       - action: "digitare comando e premere Enter"
-        expect: "input si svuota e screen mostra prompt+risposta"
+        expect: "input si svuota e renderer mostra prompt+risposta nello storico prospettico"
   - name: "Output limitato"
     steps:
       - action: "inviare più comandi oltre maxLines"
         expect: "buffer mantiene solo le ultime linee"
+  - name: "Separazione input e profondità"
+    steps:
+      - action: "digitare testo mentre sono presenti molte linee nello storico"
+        expect: "input corrente resta leggibile in primo piano e solo lo storico viene renderizzato con fuga"
+  - name: "Fallback renderer non disponibile"
+    steps:
+      - action: "istanziare adapter senza porta renderer prospettico"
+        expect: "errore esplicito fail-fast in fase di composizione"
   - name: "Container DOM mancante"
     steps:
       - action: "istanziare adapter con elementi non risolti"
         expect: "errore esplicito fail-fast"
 
 todos:
-  - "Estrarre policy di rendering prompt in un formatter dedicato."
+  - "Estrarre una porta di rendering prospettico per disaccoppiare adapter e DOM."

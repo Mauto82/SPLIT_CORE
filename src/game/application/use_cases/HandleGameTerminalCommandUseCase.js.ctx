@@ -1,0 +1,26 @@
+purpose: "Eseguire comandi di gioco dal terminale."
+
+tensions:
+  - "Stato persistente vs Volatile: Modifiche allo stato del gioco devono essere salvate."
+  - "Output vs Prompt: Alcuni comandi cambiano il contesto (cd), richiedendo un nuovo prompt."
+
+workflows:
+  execute: "Riceve input raw, parsa il comando, esegue l'azione sulla sessione corrente, salva la sessione, ritorna output e prompt aggiornato."
+
+conceptualTests:
+  - name: "Comando ls"
+    steps:
+      - action: "execute({ rawInput: 'ls' })"
+        expect: "ritorna lista file nella directory corrente"
+  - name: "Comando cd valido"
+    steps:
+      - action: "execute({ rawInput: 'cd clues' })"
+        expect: "ritorna output vuoto e prompt aggiornato con nuovo path"
+  - name: "Comando cd invalido"
+    steps:
+      - action: "execute({ rawInput: 'cd invalid' })"
+        expect: "ritorna errore"
+  - name: "Comando sconosciuto"
+    steps:
+      - action: "execute({ rawInput: 'unknown' })"
+        expect: "ritorna errore esplicito di comando non trovato"

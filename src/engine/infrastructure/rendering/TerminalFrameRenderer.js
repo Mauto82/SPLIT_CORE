@@ -76,6 +76,7 @@ export class TerminalFrameRenderer extends FrameRendererPort {
     this.container.style.fontSize = `${this.fontSizePx}px`;
     this.container.style.lineHeight = `${this.lineHeight}`;
     this.container.style.userSelect = "none";
+    this.frameCount = 0;
   }
 
   beginFrame() {

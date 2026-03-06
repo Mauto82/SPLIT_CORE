@@ -1,0 +1,19 @@
+purpose: "Gestire lo stato della sessione di gioco, inclusi livello attuale, file system e storico comandi."
+
+tensions:
+  - "Persistenza vs Volatilità: Lo stato deve essere salvabile (es. localStorage) ma manipolabile in memoria."
+
+workflows:
+  start: "Inizializza una nuova sessione con livello 0 e file system pulito"
+  advanceLevel: "Incrementa il livello di evoluzione"
+  executeCommand: "Registra un comando eseguito nello storico"
+
+conceptualTests:
+  - name: "Nuova sessione"
+    steps:
+      - action: "new GameSession()"
+        expect: "level è 0, fileSystem è inizializzato"
+  - name: "Avanzamento livello"
+    steps:
+      - action: "advanceLevel()"
+        expect: "level diventa 1"

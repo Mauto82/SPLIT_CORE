@@ -1,0 +1,9 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/app.Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./:/usr/share/nginx/html

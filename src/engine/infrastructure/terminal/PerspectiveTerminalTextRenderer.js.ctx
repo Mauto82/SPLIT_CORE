@@ -1,0 +1,38 @@
+purpose: "Renderizzare lo storico del terminale su un piano prospettico con punto di fuga e attenuazione visiva."
+
+tensions:
+  - "Immersione visiva vs leggibilità: le linee lontane devono attenuarsi senza compromettere la porzione vicina."
+  - "Effetto profondità vs performance: trasformazioni CSS leggere invece di pipeline grafica pesante."
+  - "Configurabilità artistica vs fail-fast: tutti i parametri prospettici sono iniettati e validati esplicitamente."
+
+workflows:
+  perspective_render_flow: "riceve array linee -> mantiene solo finestra di profondità configurata -> mappa ogni riga su coordinata 3D -> proietta verso punto di fuga -> applica scala/opacità/blur in base alla distanza -> aggiorna il contenitore DOM"
+
+conceptualTests:
+  - name: "Inizializzazione obbligatoria"
+    steps:
+      - action: "istanziare renderer senza screenElement"
+        expect: "errore esplicito al costruttore"
+  - name: "Parametri prospettici invalidi"
+    steps:
+      - action: "istanziare renderer con depthStep o maxDepth non positivi"
+        expect: "errore esplicito fail-fast"
+  - name: "Punto di fuga configurato"
+    steps:
+      - action: "renderizzare linee con vanishingPointX e vanishingPointY validi"
+        expect: "linee più lontane convergono visivamente verso il punto di fuga configurato"
+  - name: "Riduzione progressiva scala"
+    steps:
+      - action: "renderizzare sequenza di righe su profondità crescente"
+        expect: "linee più lontane vengono renderizzate con scala minore"
+  - name: "Attenuazione progressiva"
+    steps:
+      - action: "renderizzare righe da near a far"
+        expect: "opacità diminuisce con la distanza e oltre soglia le righe non vengono mostrate"
+  - name: "Input lines invalido"
+    steps:
+      - action: "invocare render con lines non array"
+        expect: "errore esplicito"
+
+todos:
+  - "Estrarre calcolo trasformazioni in una strategy sostituibile per stili multipli."

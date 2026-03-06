@@ -3,6 +3,7 @@ export class DomEngineTerminalAdapter {
     containerElement,
     screenElement,
     inputElement,
+    terminalTextRenderer,
     prompt,
     promptSeparator,
     maxLines,
@@ -19,6 +20,9 @@ export class DomEngineTerminalAdapter {
     }
     if (!inputElement) {
       throw new Error("inputElement is required");
+    }
+    if (!terminalTextRenderer) {
+      throw new Error("terminalTextRenderer is required");
     }
     if (!prompt) {
       throw new Error("prompt is required");
@@ -44,6 +48,7 @@ export class DomEngineTerminalAdapter {
     this.containerElement = containerElement;
     this.screenElement = screenElement;
     this.inputElement = inputElement;
+    this.terminalTextRenderer = terminalTextRenderer;
     this.prompt = prompt;
     this.promptSeparator = promptSeparator;
     this.maxLines = maxLines;
@@ -55,6 +60,13 @@ export class DomEngineTerminalAdapter {
     this.history = [];
     this.historyIndex = null;
     this.historyDraft = "";
+  }
+
+  setPrompt(newPrompt) {
+    if (typeof newPrompt !== 'string') {
+      throw new Error('Prompt must be a string');
+    }
+    this.prompt = newPrompt;
   }
 
   bind() {
@@ -87,14 +99,27 @@ export class DomEngineTerminalAdapter {
     const normalized = rawInput.trim();
     this.appendLine(`${this.prompt}${this.promptSeparator}${rawInput}`);
     this.registerHistory({ normalizedInput: normalized });
+    
     try {
-      const outputLines = this.onCommand({ rawInput });
+      const result = this.onCommand({ rawInput });
+      let outputLines = [];
+      
+      if (Array.isArray(result)) {
+        outputLines = result;
+      } else if (result && typeof result === 'object') {
+        outputLines = result.output || [];
+        if (result.prompt) {
+          this.setPrompt(result.prompt);
+        }
+      }
+
       for (const line of outputLines) {
         this.appendLine(line);
       }
     } catch (error) {
       this.appendLine(error.message);
     }
+
     this.inputElement.value = "";
     this.historyIndex = null;
     this.historyDraft = "";
@@ -161,7 +186,14 @@ export class DomEngineTerminalAdapter {
   }
 
   appendLine(line) {
-    this.lines.push(line);
+    if (typeof line !== 'string') {
+      console.warn('Invalid line type:', line);
+      return;
+    }
+    const lines = line.split('\n');
+    for (const subLine of lines) {
+      this.lines.push(subLine);
+    }
     if (this.lines.length > this.maxLines) {
       this.lines = this.lines.slice(this.lines.length - this.maxLines);
     }
@@ -174,8 +206,7 @@ export class DomEngineTerminalAdapter {
   }
 
   render() {
-    this.screenElement.textContent = this.lines.join("\n");
-    this.screenElement.scrollTop = this.screenElement.scrollHeight;
+    this.terminalTextRenderer.render({ lines: this.lines });
   }
 
   focusInput() {

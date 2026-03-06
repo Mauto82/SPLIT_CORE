@@ -32,3 +32,9 @@ ctx-watch-reverse:
 
 ctx-cache-clear:
 	$(CTX_COMPOSE) run --rm contextdoc-tools $(CTX_RUN) clear-cache
+
+run:
+	docker compose up -d
+
+stop:
+	docker compose down

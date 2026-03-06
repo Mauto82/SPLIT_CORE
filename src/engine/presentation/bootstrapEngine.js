@@ -7,6 +7,9 @@ import { AnimationLoop } from "../infrastructure/clock/AnimationLoop.js";
 import { FormulaProjectionAdapter } from "../infrastructure/projection/FormulaProjectionAdapter.js";
 import { buildFrameRendererAdapter } from "../infrastructure/rendering/buildFrameRendererAdapter.js";
 import { DomEngineTerminalAdapter } from "../infrastructure/terminal/DomEngineTerminalAdapter.js";
+import { PerspectiveTerminalTextRenderer } from "../infrastructure/terminal/PerspectiveTerminalTextRenderer.js";
+import { HandleGameTerminalCommandUseCase } from "../../game/application/use_cases/HandleGameTerminalCommandUseCase.js";
+import { LocalStorageGameSessionRepository } from "../../game/infrastructure/repositories/LocalStorageGameSessionRepository.js";
 
 export async function bootstrapEngine({ configPath }) {
   const configRepository = new JsonConfigRepository({ path: configPath });
@@ -25,7 +28,8 @@ export async function bootstrapEngine({ configPath }) {
     shapes: config.scene.shapes
   });
   const runtimeState = new EngineRuntimeState({
-    paused: config.loop.startPaused
+    paused: config.loop.startPaused,
+    projectionEnabled: config.projection.enabled
   });
   const terminalConsole = buildTerminalConsole({
     config,
@@ -40,7 +44,10 @@ export async function bootstrapEngine({ configPath }) {
       if (runtimeState.isPaused()) {
         return;
       }
-      const points3d = sceneService.nextFramePoints();
+      let points3d = [];
+      if (runtimeState.isProjectionEnabled()) {
+        points3d = sceneService.nextFramePoints();
+      }
       renderSceneUseCase.execute({
         points3d,
         viewport: config.viewport,
@@ -78,22 +85,54 @@ function buildTerminalConsole({ config, sceneService, runtimeState, documentRef 
   if (!inputElement) {
     throw new Error(`Terminal console input not found: ${config.rendering.terminal.console.inputElementId}`);
   }
-  const commandUseCase = new HandleEngineTerminalCommandUseCase({
+  const engineCommandUseCase = new HandleEngineTerminalCommandUseCase({
     runtimeState,
     sceneService,
     commandsConfig: config.rendering.terminal.console.commands,
     messagesConfig: config.rendering.terminal.console.messages
   });
+  const gameSessionRepository = new LocalStorageGameSessionRepository();
+  const gameCommandUseCase = new HandleGameTerminalCommandUseCase({ gameSessionRepository });
+  const engineCommandNames = engineCommandUseCase.getCommandNames();
+  const gameCommandNames = gameCommandUseCase.getCommandNames();
+  const initialPrompt = gameCommandUseCase.getInitialPrompt();
+  const perspectiveConfig = config.rendering.terminal.console.perspective;
+  const terminalTextRenderer = new PerspectiveTerminalTextRenderer({
+    screenElement,
+    focalLength: perspectiveConfig.focalLength,
+    cameraDistance: perspectiveConfig.cameraDistance,
+    vanishingPointX: perspectiveConfig.vanishingPointX,
+    vanishingPointY: perspectiveConfig.vanishingPointY,
+    nearZ: perspectiveConfig.nearZ,
+    depthStep: perspectiveConfig.depthStep,
+    maxDepth: perspectiveConfig.maxDepth,
+    nearOpacity: perspectiveConfig.nearOpacity,
+    farOpacity: perspectiveConfig.farOpacity,
+    blurMaxPx: perspectiveConfig.blurMaxPx,
+    nearScale: perspectiveConfig.nearScale,
+    lineGapY: perspectiveConfig.lineGapY,
+    baseX: perspectiveConfig.baseX,
+    baseY: perspectiveConfig.baseY
+  });
+
   return new DomEngineTerminalAdapter({
     containerElement,
     screenElement,
     inputElement,
-    prompt: config.rendering.terminal.console.prompt,
+    terminalTextRenderer,
+    prompt: initialPrompt,
     promptSeparator: config.rendering.terminal.console.promptSeparator,
     maxLines: config.rendering.terminal.console.maxLines,
     historySize: config.rendering.terminal.console.historySize,
     autocompleteEnabled: config.rendering.terminal.console.autocompleteEnabled,
-    commandNames: commandUseCase.getCommandNames(),
-    onCommand: ({ rawInput }) => commandUseCase.execute({ rawInput })
+    commandNames: [...engineCommandNames, ...gameCommandNames],
+    onCommand: ({ rawInput }) => {
+      const parts = rawInput.trim().split(/\s+/);
+      const command = parts[0];
+      if (engineCommandNames.includes(command)) {
+        return engineCommandUseCase.execute({ rawInput });
+      }
+      return gameCommandUseCase.execute({ rawInput });
+    }
   });
 }

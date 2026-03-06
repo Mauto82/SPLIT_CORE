@@ -1,0 +1,19 @@
+purpose: "Persistere e recuperare la sessione di gioco utilizzando localStorage del browser."
+
+tensions:
+  - "JSON Serialization vs Object Identity: Necessario ricostruire istanze di dominio (GameSession, FileSystem) da JSON."
+
+workflows:
+  save: "Serializza l'oggetto GameSession in JSON e lo salva in localStorage con una chiave fissa."
+  load: "Recupera il JSON da localStorage, deserializza e ricostruisce le istanze di dominio. Se non esiste, ritorna null."
+
+conceptualTests:
+  - name: "Salvataggio e recupero"
+    steps:
+      - action: "save(sessione)"
+      - action: "load()"
+        expect: "ritorna una sessione equivalente a quella salvata"
+  - name: "Recupero inesistente"
+    steps:
+      - action: "load() quando storage vuoto"
+        expect: "ritorna null"

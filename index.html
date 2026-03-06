@@ -35,18 +35,19 @@
       #engine-console {
         position: absolute;
         left: 50%;
-        bottom: 12px;
-        transform: translateX(-50%);
+        top: 50%;
+        transform: translate(-50%, -50%);
         z-index: 10;
         display: none;
         width: min(960px, calc(100vw - 24px));
-        height: min(260px, calc(100vh - 24px));
+        height: min(600px, calc(100vh - 48px));
         grid-template-rows: minmax(0, 1fr) auto;
         gap: 8px;
         padding: 10px;
         box-sizing: border-box;
         border: 1px solid #44d9e6;
-        background: rgba(0, 0, 0, 0.88);
+        background: rgba(0, 0, 0, 0.95);
+        box-shadow: 0 0 20px rgba(68, 217, 230, 0.2);
       }
 
       #engine-console-output {
@@ -74,6 +75,9 @@
   </head>
   <body>
     <main id="app">
+      <div id="loading-overlay" style="position: fixed; inset: 0; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; z-index: 1000;">
+        Loading Projection Engine...
+      </div>
       <canvas id="projection-canvas"></canvas>
       <pre id="projection-terminal"></pre>
       <section id="engine-console">
@@ -81,6 +85,6 @@
         <input id="engine-console-input" type="text" autocomplete="off" />
       </section>
     </main>
-    <script type="module" src="./src/main.js"></script>
+    <script type="module" src="./src/main.js?v=3"></script>
   </body>
 </html>

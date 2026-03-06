@@ -31,9 +31,27 @@
         "maxLines": 14,
         "historySize": 64,
         "autocompleteEnabled": true,
+        "perspective": {
+          "focalLength": 2.8,
+          "cameraDistance": 1.6,
+          "vanishingPointX": 0.5,
+          "vanishingPointY": 0.1,
+          "nearZ": 0,
+          "depthStep": 0.22,
+          "maxDepth": 20,
+          "nearOpacity": 1,
+          "farOpacity": 0.02,
+          "blurMaxPx": 2.8,
+          "nearScale": 1,
+          "lineGapY": 0.028,
+          "baseX": 0.035,
+          "baseY": 0.9
+        },
         "welcomeLines": [
-          "Terminale motore attivo",
-          "Comandi: help, status, pause, resume, speed <valore>, reset"
+          "P0 KERNEL PANIC RECOVERY MODE",
+          "Filesystem mounted read-only.",
+          "User 'guest' logged in with restricted privileges.",
+          "Type 'help' for available commands."
         ],
         "commands": {
           "help": "help",
@@ -41,10 +59,11 @@
           "resume": "resume",
           "speed": "speed",
           "status": "status",
-          "reset": "reset"
+          "reset": "reset",
+          "projection": "projection"
         },
         "messages": {
-          "help": "Comandi disponibili: help | status | pause | resume | speed <valore positivo> | reset",
+          "help": "Comandi disponibili: help | status | pause | resume | speed <valore positivo> | reset | projection <on|off>",
           "paused": "Loop in pausa",
           "resumed": "Loop ripreso",
           "reset": "Runtime e animazione resettati",
@@ -53,14 +72,18 @@
           "pausedToken": "paused",
           "speedToken": "speed",
           "shapesToken": "shapes",
+          "projectionToken": "projection",
           "speedUpdatedPrefix": "Speed aggiornata",
+          "projectionUpdatedPrefix": "Projection aggiornata",
           "invalidSpeedValue": "Valore speed non valido",
+          "invalidProjectionValue": "Valore projection non valido (usa on/off)",
           "unknownCommandPrefix": "Comando sconosciuto"
         }
       }
     }
   },
   "projection": {
+    "enabled": false,
     "focalLength": 280,
     "cameraDistance": 6
   },

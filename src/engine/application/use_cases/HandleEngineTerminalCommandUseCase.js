@@ -49,6 +49,9 @@ export class HandleEngineTerminalCommandUseCase {
       this.sceneService.resetAnimationState();
       return [this.messagesConfig.reset];
     }
+    if (command === this.commandsConfig.projection) {
+      return this.handleProjection({ value });
+    }
     return [`${this.messagesConfig.unknownCommandPrefix}: ${command}`];
   }
 
@@ -68,10 +71,22 @@ export class HandleEngineTerminalCommandUseCase {
     return [`${this.messagesConfig.speedUpdatedPrefix}: ${parsedValue}`];
   }
 
+  handleProjection({ value }) {
+    if (value === "on") {
+      this.runtimeState.setProjectionEnabled({ value: true });
+    } else if (value === "off") {
+      this.runtimeState.setProjectionEnabled({ value: false });
+    } else {
+      throw new Error(this.messagesConfig.invalidProjectionValue);
+    }
+    return [`${this.messagesConfig.projectionUpdatedPrefix}: ${value}`];
+  }
+
   buildStatusLine() {
     const pausedToken = this.runtimeState.isPaused()
       ? this.messagesConfig.pausedToken
       : this.messagesConfig.runningToken;
-    return `${this.messagesConfig.statusPrefix} ${pausedToken} | ${this.messagesConfig.speedToken}: ${this.sceneService.getRotationSpeedMultiplier()} | ${this.messagesConfig.shapesToken}: ${this.sceneService.getShapeCount()}`;
+    const projectionToken = this.runtimeState.isProjectionEnabled() ? "on" : "off";
+    return `${this.messagesConfig.statusPrefix} ${pausedToken} | ${this.messagesConfig.projectionToken}: ${projectionToken} | ${this.messagesConfig.speedToken}: ${this.sceneService.getRotationSpeedMultiplier()} | ${this.messagesConfig.shapesToken}: ${this.sceneService.getShapeCount()}`;
   }
 }

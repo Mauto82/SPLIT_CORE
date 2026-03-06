@@ -1,0 +1,26 @@
+purpose: "Gestire la struttura delle cartelle e la navigazione nel file system virtuale."
+
+tensions:
+  - "Semplicità vs Realismo: Non implementiamo un vero FS con inode, ma una struttura dati in-memory persistibile."
+
+workflows:
+  navigation: "changeDirectory accetta un path relativo o assoluto e aggiorna currentPath"
+  listing: "listFiles ritorna i nomi dei file/cartelle nella directory corrente o specificata"
+
+conceptualTests:
+  - name: "Navigazione root"
+    steps:
+      - action: "changeDirectory('/')"
+        expect: "currentPath è '/'"
+  - name: "Navigazione cartella valida"
+    steps:
+      - action: "changeDirectory('clues')"
+        expect: "currentPath è '/clues'"
+  - name: "Navigazione cartella invalida"
+    steps:
+      - action: "changeDirectory('invalid')"
+        expect: "lancia errore"
+  - name: "Listing root default"
+    steps:
+      - action: "listFiles('/')"
+        expect: "ritorna array con clues/, trash/, system/ e README.txt"

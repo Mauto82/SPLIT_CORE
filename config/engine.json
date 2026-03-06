@@ -22,6 +22,7 @@
     }
   },
   "projection": {
+    "enabled": false,
     "focalLength": 280,
     "cameraDistance": 6
   },
